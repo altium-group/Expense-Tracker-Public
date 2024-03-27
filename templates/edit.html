@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <title>Modifier - Expense Tracker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='profil.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='icon.ico') }}"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+<div class="content">
+    <a href="http://127.0.0.1:5000/" class="return"><i class="fas fa-arrow-left"></i> Retour</a>
+    <div class="container">
+        <div class="title">Modifier une dépense</div>
+        <div class="content">
+            <form action="/edit" method="POST">
+                <div class="user-details">
+                    <div class="input-box">
+                        <span class="details">Montant</span>
+                        <input type="number" value="{{ expense.id }}" name="id" style="display: none;" required>
+                        <input type="number" value="{{ expense.amount }}" name="amount" step="0.01" min="0" required>
+                    </div>
+                    <div class="input-box">
+                        <span class="details">Date</span>
+                        <input type="date" value="{{ expense.date }}" name="date" required>
+                    </div>
+                    <div class="input-box">
+                        <span class="details">Commentaire</span>
+                        <input type="text" value="{{ expense.comment }}" name="comment" required>
+                    </div>
+                    <div class="input-box">
+                        <span class="details">Catégorie</span>
+                        <select name="category" required>
+                            {% for i in category %}
+                            {% if i == expense.category %}
+                            <option value="{{ i }}" selected>{{ i }}</option>
+                            {% else %}
+                            <option value="{{ i }}">{{ i }}</option>
+                            {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="button">
+                    <input type="submit" value="Modifier">
+                    <input class="delete" style="padding: 5px;" type="submit" name="action" value="Supprimer">
+                </div>
+            </form>
+        </div>
+    </div>
+    {% include 'copyrights.html' %}
+</div>
+</body>
+</html>

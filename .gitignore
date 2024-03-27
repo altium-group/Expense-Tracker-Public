@@ -1,0 +1,10 @@
+__pycache__/*
+__pycache__
+.vscode
+.vscode/*
+.idea
+.idea/*
+expenses.db
+tets.py
+data.xlsx
+version.py

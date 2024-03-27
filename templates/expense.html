@@ -1,0 +1,79 @@
+<html lang = "fr" dir = "ltr">
+<head>
+    <meta charset = "utf-8">
+    <title>Expense Tracker</title>
+    <link rel = "stylesheet" href = "{{ url_for('static', filename='style.css') }}">
+    <link rel = "stylesheet" href = "{{ url_for('static', filename='box.css') }}">
+    <link rel = "icon" type = "image/x-icon" href = "{{ url_for('static', filename='icon.ico') }}"/>
+    <link rel = "stylesheet" href = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+    <meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+    <script src = "https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+{% include 'navigation.html' %}
+<div class = "search-bar" style = "display: flex; align-items: center; margin-top: 5px;">
+    <input type = "text" id = "searchInput" placeholder = "Rechercher..." oninput = "searchTable()">
+    <select id = "filterDropdown" onchange = "filterTable()" style = "margin-left: 5px;">
+        <option value = "all">Tous</option>
+        {% for i in category %}
+        <option value = "{{ i }}">{{ i }}</option>
+        {% endfor %}
+    </select>
+    <input type = "date" id = "calendarInput" onchange = "Calendar()" style = "margin-left: 5px;">
+    <div id = "resultCount" style = "margin-left: 5px; color: white; display: none;"></div>
+</div>
+
+<style>
+    .table-container {
+        overflow-y: auto; /* Ajoute un défilement vertical si nécessaire */
+    }
+    .hidden {
+    display: none;
+}
+</style>
+<div class = "content">
+    <div id = "original" class = "box_init" style = "position: fixed; bottom: 55px; top: 115px; left: 5px; right: 5px; display: block;">
+        <div class = "table-container">
+            <table id = "dataTable" style = "width: 100%;">
+                <thead>
+                <tr style = "cursor: pointer;">
+                    <th><input type="checkbox" id="masterCheckbox"></th>
+                    <th>Date (rentré)</th>
+                    <th>Date (achat)</th>
+                    <th>Montant</th>
+                    <th>Commentaire</th>
+                    <th>Catégorie</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for expenses in liste %}
+                <tr class = "list" data-date = "{{ expenses.iso }}">
+                    <td><input type = "checkbox" name = "expense-checkbox" value = "{{ expenses.id }}"></td>
+                    <td>{{ expenses.time }}</td>
+                    <td>{{ expenses.date }}</td>
+                    <td>{{ expenses.amount }}</td>
+                    <td style = "word-wrap: break-word;"> {{ expenses.comment }}</td>
+                    <td>{{ expenses.category }}</td>
+                    <td>
+                        <a class = "link" href = "edit/{{ expenses.id }}"><i class = "fa-solid fa-pen"></i></a>
+                        <a class = "link" onclick = "copy('{{ expenses.sharecode }}')"><i class = "fas fa-share-alt"></i></a>
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div id = "buttonsDiv" style = "text-align: center; bottom: 30px; left: 45%; position: absolute; display: none;">
+        <a class = "btn btn-secondary" onclick = "deselectAll()">Annuler</a>
+        <a class = "btn btn-danger logout" onclick = "deleteSelectedExpenses()">Supprimer</a>
+    </div>
+    {% include 'copyrights.html' %}
+</div>
+<script type = "text/javascript" src = "./static/filters.js" data-column-index = "3"></script>
+<script type = "text/javascript" src = "./static/copy.js"></script>
+<script type = "text/javascript" src = "./static/delete.js"></script>
+<script type = "text/javascript" src = "./static/deselect.js"></script>
+</body>
+</html>

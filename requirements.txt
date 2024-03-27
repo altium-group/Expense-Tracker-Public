@@ -1,0 +1,11 @@
+flask
+forex_python
+pymongo
+datetime
+string
+random
+requests
+hashlib
+math
+io
+pandas

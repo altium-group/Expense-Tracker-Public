@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <title>Ajouter - Expense Tracker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='box.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='icon.ico') }}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+<style>
+    .table-container {
+        overflow-y: auto; /* Ajoute un défilement vertical si nécessaire */
+</style>
+<div class="content">
+    <form action="/import" method="post">
+        <div id = "original" class = "box_init" style = "position: fixed; bottom: 55px; top: 115px; left: 5px; right: 5px; display: block;">
+        {% for index, i in data %}
+            <div class="expense-row">
+                <label for="amount">Montant :</label>
+                <input type="number" value="{{ i.amount }}" step="0.01" name="amount-{{ index }}" id="amount" required>
+                <label for="date">Date :</label>
+                <input type="date" value="{{ i.date }}" name="date-{{ index }}" id="date" required>
+                <label for="comment">Commentaire :</label>
+                <input type="text" value="{{ i.comment }}" name="comment-{{ index }}" id="comment" required>
+                <label for="virement">Virement ?</label>
+                {% if i.virement == True %}
+                    <input type="checkbox" name="virement-{{ index }}" value="True" id="virement" checked>
+                {% else %}
+                    <input type="checkbox" name="virement-{{ index }}" value="True" id="virement">
+                {% endif %}
+                <select name="category-{{ index }}" required>
+                    {% for category in categories %}
+                        {% if i.category == category %}
+                            <option value="{{ category }}" selected>{{ category }}</option>
+                        {% else %}
+                            <option value="{{ category }}">{{ category }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+                <button type="button" class="delete-button" onclick="deleteExpenseRow(this)">Supprimer</button>
+            </div>
+        {% endfor %}
+        </div>
+        <input style="bottom: 25px;" type="submit" value="Envoyer">
+    </form>
+    {% include 'copyrights.html' %}
+</div>
+
+<script>
+    function deleteExpenseRow(button) {
+        var row = button.parentNode;
+        row.parentNode.removeChild(row);
+        updateIndices();
+    }
+
+    function updateIndices() {
+    var rows = document.getElementsByClassName("expense-row");
+    for (var i = 0; i < rows.length; i++) {
+        var inputs = rows[i].getElementsByTagName("input");
+        var selects = rows[i].getElementsByTagName("select"); // Ajout pour récupérer les champs select
+        for (var j = 0; j < inputs.length; j++) {
+            var name = inputs[j].name;
+            inputs[j].name = name.replace(/\d+/, i);
+        }
+        for (var k = 0; k < selects.length; k++) { // Ajout pour mettre à jour les champs select
+            var selectName = selects[k].name;
+            selects[k].name = selectName.replace(/\d+/, i);
+        }
+    }
+}
+
+</script>
+
+</body>
+</html>

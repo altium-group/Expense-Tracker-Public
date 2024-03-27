@@ -1,0 +1,65 @@
+<html lang="fr" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <title>Expense Tracker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='box.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='icon.ico') }}"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+{% include 'navigation.html' %}
+<div class="search-bar" style="display: flex; align-items: center; margin-top: 5px;">
+    <input type="text" id="searchInput" placeholder="Rechercher..." oninput="searchTable()">
+    <div id="resultCount" style="margin-left: 5px; color: white; display: none;"></div>
+</div>
+
+<style>
+    .table-container {
+        overflow-y: auto; /* Ajoute un défilement vertical si nécessaire */
+    }
+    .hidden {
+    display: none;
+}
+</style>
+<div class="content">
+    <div id="original" class="box_init"
+         style="position: fixed; bottom: 20px; top: 115px; left: 5px; right: 5px; display: block;">
+        <div class="table-container">
+            <table id="dataTable" style="width: 100%;">
+                <thead>
+                <tr style="cursor: pointer;">
+                    <th>Nom</th>
+                    <th>Couleur</th>
+                    <th>Total</th>
+                    <th>Modifier</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="list">
+                    <td>Ajouter</td>
+                    <td>Catégorie</td>
+                    <td>-</td>
+                    <td><a class="link" href="manage"><i class="fas fa-plus"></i></a>
+                    </td>
+                </tr>
+                {% for category in liste %}
+                <tr class="list">
+                    <td>{{ category.name }}</td>
+                    <td style="color: {{ category.color }};">{{ category.color }}</td>
+                    <td>{{ category.total|comma }} - {{ category.percent }}</td>
+                    <td><a class="link" href="editcategory/{{ category.id }}"><i class="fas fa-cog"></i></a>
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% include 'copyrights.html' %}
+</div>
+<script type="text/javascript" src="./static/filters.js" data-column-index="0"></script>
+</body>
+</html>

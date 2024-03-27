@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <title>Expense Tracker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='box.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='icon.ico') }}"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .notification-banner {
+            background-color: #4752c4;
+            color: #f3f3fb;
+            width: 100%;
+            padding: 5px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+{% include 'navigation.html' %}
+{% include 'ntf.html' %}
+
+<div class="content">
+    <p>Budget : {{ budget|comma }}<br>Dépenses Totales : {{ totalLabel|comma }}</p><br>
+    <p>{{ totals|safe }}</p><br>
+    <div class="images">
+        <canvas class="chart" id="myChart" width="380"></canvas>
+        <script>
+            var ctx = document.getElementById('myChart').getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: {{ labels|safe }},
+                    datasets: [{
+                        data: {{ values|safe }},
+                        backgroundColor: {{ color|safe }},
+                        borderColor: {{ bcolor|safe }},
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: false,
+                    maintainAspectRatio: false
+                }
+            });
+        </script>
+        <canvas class="courbe" id="myLineChart"></canvas>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var ctx = document.getElementById('myLineChart').getContext('2d');
+                var myLineChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: {{ date|safe }},
+                        datasets: [
+                        {
+                            label: 'Dépenses',
+                            data: {{ amounts|safe }},
+                            borderColor: '{{ gbcolor|safe }}',
+                            backgroundColor: '{{ gcolor|safe }}',
+                        }
+                        ]
+                    },
+                    options: {
+                        responsive: false,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: {
+                                type: 'category',
+                                labels: {{ date|safe }},
+                                // grid: {
+                                //     color: 'white'
+                                // },
+                                ticks: {
+                                    color: 'white' // Couleur des labels de l'axe x
+                                },
+                            },
+                            y: {
+                                beginAtZero: true,
+                                // grid: {
+                                //     color: 'white'
+                                // },
+                                ticks: {
+                                    color: 'white' // Couleur des labels de l'axe x
+                                },
+                            }
+                        }
+                    }
+                });
+            });
+        </script>
+    </div>
+    {% include 'copyrights.html' %}
+</div>
+</body>
+</html>

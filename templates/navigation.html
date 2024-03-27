@@ -1,0 +1,13 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+<nav>
+    <div class="logo"></div>
+    <ul>
+        <li><a href="{{ url_for('home') }}"><i class="fas fa-home"></i> Accueil</a></li>
+        <li><a href="{{ url_for('addexp') }}"><i class="fas fa-plus"></i> Ajouter</a></li>
+        <li><a href="{{ url_for('expenses') }}"><i class="fas fa-list-alt"></i> Dépenses</a></li>
+        <li><a href="{{ url_for('categories') }}"><i class="fas fa-cog"></i> Catégories</a></li>
+        <li><a href="{{ url_for('graphs', category='all') }}"><i class="fa-solid fa-chart-simple"></i> Graph</a></li>
+        <li><a href="{{ url_for('settings') }}"><i class="fa-solid fa-bars"></i> Paramètres</a></li>
+        <li><a href="{{ url_for('logout') }}" class="logout"><i class="fas fa-sign-out-alt fa-flip-horizontal"></i> Logout</a></li>
+    </ul>
+</nav>

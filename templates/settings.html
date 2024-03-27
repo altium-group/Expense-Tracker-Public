@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang = "fr" dir = "ltr">
+<head>
+    <meta charset = "utf-8">
+    <title>Expense Tracker</title>
+    <link rel = "stylesheet" href = "{{ url_for('static', filename='style.css') }}">
+    <link rel = "stylesheet" href = "{{ url_for('static', filename='toggle.css') }}">
+    <link rel = "icon" type = "image/x-icon" href = "{{ url_for('static', filename='icon.ico') }}"/>
+    <meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+    <style>
+        .content {
+            display: flex;
+            justify-content: space-between; /* Pour espacer les éléments sur l'axe horizontal */
+            align-items: flex-start; /* Pour aligner les éléments sur le côté supérieur */
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-width: 250px;
+            margin: 0 10px;
+        }
+
+        form label {
+            color: #e9eaeb;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+{% include 'navigation.html' %}
+<div class = "content">
+    <div class = "toggle-container">
+        {% for key, value in settings.items() %}
+            {% if key != '_id' and key != 'currency' and key != 'color' %}
+                {% if data[key] == False %}
+                    <div class = "toggle-btn" onclick = "toggleButton(this, '{{ key }}')">
+                {% elif data[key] == True %}
+                    <div class = "toggle-btn active" onclick = "toggleButton(this, '{{ key }}')">
+                {% else %}
+                    <div class = "toggle-btn" onclick = "toggleButton(this, '{{ key }}')">
+                {% endif %}
+                        <span>{{ value }}</span>
+                        <div class = "circle"></div>
+                    </div>
+            {% endif %}
+        {% endfor %}
+        <a class="btn" href="{{ url_for('exportData') }}">Exporter les données</a>
+    </div>
+    <form action="/settings" method="POST">
+        <label for = "import">Importer des dépenses : </label>
+        <input type = "file" id = "import" accept = ".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" name = "import">
+        <label for = "color">Couleur (Graphique accueil) : </label>
+        <input type = "color" name = "color" id = "color" value = "{{ data['color'] }}" required>
+        <label for = "currency">Devise : </label>
+        <select name = "currency" id = "currency" required>
+            {% for i in currencies %}
+                {% if i|symbol != None %}
+                    {% if data["currency"] == i|symbol %}
+                        <option value = "{{ i|symbol }}" selected>{{ i }} {{ i|symbol }}</option>
+                    {% else %}
+                        <option value = "{{ i|symbol }}">{{ i }} {{ i|symbol }}</option>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        </select>
+        <label for = "budget">Budget : </label>
+        <input type = "number" name = "budget" id = "budget" step = "0.01" value = "{{ user.budget }}" required>
+        <input type = "submit" value = "enregistrer">
+    </form>
+    <form action = "/user-settings" method = "POST">
+        <label for = "username">Pseudo : </label>
+        <input type = "text" name = "username" id = "username" value = "{{ user.username }}" required>
+        <label for = "email">E-mail : </label>
+        {% if user.email %}
+        <input type = "email" name = "email" id = "email" value = "{{ user.email }}">
+        {% else %}
+        <input type = "email" name = "email" id = "email">
+        {% endif %}
+        <label for = "password">Mot de passe : </label>
+        <input type = "password" name = "password" id = "password" required>
+        <input type = "submit" value = "enregistrer">
+    </form>
+</div>
+{% include 'copyrights.html' %}
+<script>
+function toggleButton(btn, btnid) {
+    btn.classList.toggle("active");
+    sendButtonClickState(btn.classList.contains("active"), btnid);
+}
+
+function sendButtonClickState(state, btnid) {
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "/update_settings", true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    var data = JSON.stringify({ "buttonClicked": state, "buttonid": btnid });
+    xhr.send(data);
+}
+</script>
+</body>
+</html>

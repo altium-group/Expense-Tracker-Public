@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <title>Oublie - Expense Tracker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='forms.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='icon.ico') }}"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+{% include 'ntf.html' %}
+<style>
+    #footer {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        padding: 5px 0;
+        text-align: center;
+    }
+
+    @media only screen and (min-width: 920px) {
+        #footer {
+            position: static;
+        }
+    }
+</style>
+<div class="content">
+    <div class="container">
+        <div class="registration form">
+            <header>Mot de passe oublié</header>
+            <form method="POST" action="/forgotten">
+                <input type="email" id="email" name="email" placeholder="E-mail" required>
+                <input type="submit" class="button" value="Envoyer un E-mail">
+            </form>
+        </div>
+    </div>
+    {% include 'copyrights.html' %}
+</div>
+</body>
+</html>

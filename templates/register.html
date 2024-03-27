@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <title>Inscription - Expense Tracker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='forms.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='icon.ico') }}"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+{% include 'ntf.html' %}
+<style>
+    #footer {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        padding: 5px 0;
+        text-align: center;
+    }
+
+    @media only screen and (min-width: 920px) {
+        #footer {
+            position: static;
+        }
+    }
+</style>
+<div class="content">
+    <div class="container">
+        <div class="registration form">
+            <header>S'inscrire</header>
+            <form method="POST" action="/register">
+                <input type="text" id="username" name="username" placeholder="Pseudo" required>
+                <input type="email" id="email" name="email" placeholder="E-mail" required>
+                <input type="password" id="password" name="password" placeholder="Mot de passe" required>
+                <input type="password" id="confirmpassword" name="confirmpassword"
+                       placeholder="Confirmer le mot de passe" required>
+                <input type="submit" class="button" value="S'inscrire">
+            </form>
+            <div class="signup">
+                <span class="signup">Déjà un compte ? <a href="../">Se connecter</a></span>
+            </div>
+        </div>
+    </div>
+    {% include 'copyrights.html' %}
+</div>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <title>Ajouter - Expense Tracker</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='profil.css') }}">
+        <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='icon.ico') }}" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <div class="content">
+            <a href="http://127.0.0.1:5000/" class="return"><i class="fas fa-arrow-left"></i> Retour</a>
+            <div class="container">
+                <div class="title">Ajouter une dépense</div>
+                    <div class="content">
+                        <form action="/add" method="POST">
+                            <div class="user-details">
+                                <div class="input-box">
+                                    <span class="details">Montant</span>
+                                    <input type="number" name="amount" step="0.01" min="0" required>
+                                </div>
+                                <div class="input-box">
+                                    <span class="details">Date</span>
+                                    <input type="date" value="{{ date }}" name="date" required>
+                                </div>
+                                <div class="input-box">
+                                    <span class="details">Commentaire</span>
+                                    <input type="text" name="comment" required>
+                                </div>
+                                <div class="input-box">
+                                    <span class="details">Catégorie</span>
+                                    <select name="category" required>
+                                        {% for i in category %}
+                                        <option value="{{ i }}">{{ i }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="vir-details">
+                                <input type="radio" name="vir" value="True" id="dot-1">
+                                <input type="radio" name="vir" value="False" id="dot-2" required>
+                                <span class="vir-title">Virement ?</span>
+                                <div class="category">
+                                    <label for="dot-1">
+                                        <span class="dot one"></span>
+                                        <span class="vir">Oui</span>
+                                    </label>
+                                    <label for="dot-2">
+                                        <span class="dot two"></span>
+                                        <span class="vir">Non</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="button">
+                                <input type="submit" value="Ajouter">
+                            </div>
+                        </form>
+                </div>
+            </div>
+            {% include 'copyrights.html' %}
+        </div>
+    </body>
+</html>

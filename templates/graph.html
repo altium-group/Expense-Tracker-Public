@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <title>Expense Tracker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='icon.ico') }}"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+{% include 'navigation.html' %}
+<div class="content">
+    <div class="search-bar" style="display: flex; align-items: center; margin-top: 5px;">
+        <select id="filterDropdown" onchange="dropdown()" style="margin-left: 5px;">
+            <option value="all">Tous</option>
+            {% for i in categories %}
+                {% if name == i %}
+                    <option value="{{ i }}" selected>{{ i }}</option>
+                {% else %}
+                    <option value="{{ i }}">{{ i }}</option>
+                {% endif %}
+            {% endfor %}
+        </select>
+    </div>
+    <div class="images">
+        <canvas class="graph" id="myLineChart"></canvas>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var ctx = document.getElementById('myLineChart').getContext('2d');
+                var myLineChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: {{ date|safe }},
+                        datasets: [
+                        {
+                            label: '{{ name|safe }}',
+                            data: {{ amounts|safe }},
+                            borderColor: '{{ bcolor|safe }}',
+                            backgroundColor: '{{ color|safe }}',
+                        }
+                        ]
+                    },
+                    options: {
+                        responsive: false,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: {
+                                type: 'category',
+                                labels: {{ date|safe }},
+                                // grid: {
+                                //     color: 'white'
+                                // },
+                                ticks: {
+                                    color: 'white' // Couleur des labels de l'axe x
+                                },
+                            },
+                            y: {
+                                beginAtZero: true,
+                                // grid: {
+                                //     color: 'white'
+                                // },
+                                ticks: {
+                                    color: 'white' // Couleur des labels de l'axe x
+                                },
+                            }
+                        }
+                    }
+                });
+            });
+        </script>
+        <script>
+            document.getElementById("filterDropdown").onchange = function() {
+                var selectedValue = this.value;
+                var redirectURL = "/graphs/" + selectedValue;
+                window.location.href = redirectURL;
+            };
+        </script>
+    </div>
+    {% include 'copyrights.html' %}
+</div>
+</body>
+</html>
